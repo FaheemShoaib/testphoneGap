@@ -1,42 +1,224 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script type="text/javascript" src="phonegap.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+	<head>
+		<meta charset="utf-8" />
+		<title>Blank Page - Ace Admin</title>
+		
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="assets/css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-responsive.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="assets/css/mycss.css" />
+		
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		
+	</head>
+
+<body class="skin-black skin-3">
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container-fluid grey">
+				<div class="left-gap navigation-custom">
+					<table>
+						<tr>
+							<td>
+								<a class="btn btn-mini btn-info" data-toggle="dropdown" type="button">
+									<i class="icon-only icon-align-justify"></i>
+								</a>
+								<ul class="user-menu left-gap dropdown-menu dropdown-blue dropdown-caret">
+									<li>
+										<a href="#">
+											<i class="icon-credit-card"></i>
+											Expense Report
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="icon-credit-card"></i>
+											Time Sheet Detailed Report
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="icon-credit-card"></i>
+											PW Report
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="icon-credit-card"></i>
+											Daily Report
+										</a>
+									</li>
+								</ul>
+							</td>
+							<td class="span12">
+								<a  data-toggle="dropdown" href="#" class="dropdown-toggle">
+									<h4 class="white left-gap">Orlando Brown
+										<small class="white"><i class="icon-sort-down"></i></small>
+									</h4>
+								</a>
+								<ul class="user-menu left-gap-menu dropdown-menu dropdown-blue dropdown-caret">
+									<li>
+										<a href="#">
+											<i class="icon-off"></i>
+											Logout
+										</a>
+									</li>
+								</ul>
+							</td>
+							<td>
+								<button class="btn btn-app btn-grey btn-mini left-gap">
+									<i class="icon-search bigger-160 white"></i>
+								</button>
+							</td>
+							<td>
+								<button class="btn btn-app btn-grey btn-mini">
+									<i class="icon-gift bigger-160 white"></i>
+									<span class="badge badge-success">
+										26
+									</span>
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="page-content">
+		<div class="container-fluid">
+			<div>
+				<div class="row-fluid tabbable">
+					<ul id="myTab" class="nav nav-tabs">
+						<li class="active">
+							<a href="#home" data-toggle="tab">
+								APPS
+							</a>
+						</li	>
+						<li class="">
+							<a href="#profile" data-toggle="tab">
+								TIME
+							</a>
+						</li>
+						<li class="">
+							<a href="#expense" data-toggle="tab">
+								EXPENSE
+							</a>
+						</li>
+						<li class="">
+							<a href="#rec" data-toggle="tab">
+								REC
+							</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div id="home" class="tab-pane"> Home panel </div>
+						<div id="profile" class="tab-pane"> profile panel </div>
+						<div id="expense" class="tab-pane active"> Expense panel </div>
+						<div id="rec" class="tab-pane"> 
+							<div class="row-fluid tab-header">
+								<span class="pull-right white">
+									Updated about 3 minutes ago 
+									<span>
+									<button class="btn btn-app btn-primary btn-mini">
+										<i class="icon-refresh bigger-200"></i>
+									</button>
+									</span>
+								</span>
+							</div>
+								
+							<div class="custom-div-background">
+								<table class="custom-data-table row-fluid" style="background-image: url(assets/img/timesheetpanel.png); background-repeat:repeat-y;">
+									<tr class="custom-row">
+										<td class=""> 
+											<h5 class="left-gap green td-first">AUG</h5>
+											<h3 class="left-gap white bolder" style="margin-top:-20px;">01</h3>
+										</td>
+										<td class=""> 
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">Andrews AFK Labor- 4.0</small>
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">WITT Project Mgmt - 3.5</small>
+											<h3 class="span12 white" style="margin-top: -15px;">7.5</h3>
+										</td>
+										<td class="light-green center">
+											<button class="btn btn-primary btn-small">
+												<i class="icon-plus bigger-125"></i>
+											</button>
+										</td>
+									</tr>
+									<tr class="custom-row">
+										<td class=""> 
+											<h5 class="left-gap green td-first">AUG</h5>
+											<h3 class="left-gap white bolder" style="margin-top:-20px;">01</h3>
+										</td>
+										<td class=""> 
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">Andrews AFK Labor- 4.0</small>
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">WITT Project Mgmt - 3.5</small>
+											<h3 class="span12 white" style="margin-top: -15px;">7.5</h3>
+										</td>
+										<td class="light-green center">
+											<button class="btn btn-primary btn-small">
+												<i class="icon-plus bigger-125"></i>
+											</button>
+										</td>
+									</tr>
+									<tr class="custom-row">
+										<td class=""> 
+											<h5 class="left-gap green td-first">AUG</h5>
+											<h3 class="left-gap white bolder" style="margin-top:-20px;">01</h3>
+										</td>
+										<td class=""> 
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">Andrews AFK Labor- 4.0</small>
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">WITT Project Mgmt - 3.5</small>
+											<h3 class="span12 white" style="margin-top: -15px;">7.5</h3>
+										</td>
+										<td class="light-green center">
+											<button class="btn btn-primary btn-small">
+												<i class="icon-plus bigger-125"></i>
+											</button>
+										</td>
+									</tr>
+									<tr class="custom-row">
+										<td class=""> 
+											<h5 class="left-gap green td-first">AUG</h5>
+											<h3 class="left-gap white bolder" style="margin-top:-20px;">01</h3>
+										</td>
+										<td class=""> 
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">Andrews AFK Labor- 4.0</small>
+											<small class="white span12 custom-jobdescription pull-left" style="margin-top: -10px;">WITT Project Mgmt - 3.5</small>
+											<h3 class="span12 white" style="margin-top: -15px;">7.5</h3>
+										</td>
+										<td class="light-green center">
+											<button class="btn btn-primary btn-small">
+												<i class="icon-plus bigger-125"></i>
+											</button>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
 </html>
