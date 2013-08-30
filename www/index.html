@@ -6,7 +6,8 @@
 <script>
 function LoadData () {
 	$.get("http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet", function (data) {
-			alert("recieved");
+			//alert("recieved");
+			$("#test").html("Request successful");
 			/*
 			var source = $("#timesheet-summary").html();
 			var template = Handlebars.compile(source);
@@ -18,6 +19,6 @@ function LoadData () {
 </head>
 <body>
 <button onClick="LoadData()">test button</button>
-
+<h1 id="test">Test</h1>
 </body>
 </html>
