@@ -157,17 +157,22 @@
 
     <script type="text/javascript">
         function LoadData () {
-            $.get("http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet", {}, 
+            /*$.get("http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet", {}, 
 				function (data) {
 					alert("recieved " + data.dayList[0].date);
 					var source = $("#timesheet-summary").html();
 					var template = Handlebars.compile(source);
 					$("#timesheet-summary-table").html(template(data));
-            });
-        }
-
+            });*/
+			$.ajax({
+				  type: "GET",
+				  url: "http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet",
+				  }).done(function( data ) {
+					alert("recieved " + data.dayList[0].date)
+				})
+		}
         function ShowDetails(date) {
-            $.get("/MobileApi/TimesheetDetails", {}, function (data) {
+            $.get("http://mobile.wte.hostenhanced.com/MobileApi/TimesheetDetails", {}, function (data) {
                 var win = window.open("about:blank");
                 with (win.document) {
                     open();
