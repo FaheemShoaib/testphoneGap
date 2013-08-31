@@ -169,7 +169,6 @@
 				  url: "http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet",
 				  cache:false,
 				  }).done(function( data ) {
-					alert("recieved " + data.dayList[0].date + " " + data.dayList[1].date );
 					var source = $("#timesheet-summary").html();
 					var template = Handlebars.compile(source);
 					$("#timesheet-summary-table").html(template(data));
@@ -189,7 +188,6 @@
 				  url: "http://mobile.wte.hostenhanced.com/MobileApi/TimesheetDetails",
 				  cache:false,
 				  }).done(function( data ) {
-					alert("recieved " + data.dayList[0].date + " " + data.dayList[1].date );
 					var win = window.open("about:blank");
                 	with (win.document) {
 						open();
