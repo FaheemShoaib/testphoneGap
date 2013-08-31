@@ -159,7 +159,7 @@
 
     <script type="text/javascript">
         function LoadData () {
-            $.getJSON("http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet", {}, 
+            $.get("http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet", {}, 
 				function (data) {
 					//alert("recieved");
 					var source = $("#timesheet-summary").html();
@@ -169,7 +169,7 @@
         }
 
         function ShowDetails(date) {
-            $.getJSON("/MobileApi/TimesheetDetails", {}, function (data) {
+            $.get("/MobileApi/TimesheetDetails", {}, function (data) {
                 var win = window.open("about:blank");
                 with (win.document) {
                     open();
