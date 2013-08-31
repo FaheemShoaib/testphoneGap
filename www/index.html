@@ -159,7 +159,7 @@
         function LoadData () {
             $.get("http://mobile.wte.hostenhanced.com/MobileApi/TimeSheet", {}, 
 				function (data) {
-					alert("recieved");
+					alert("recieved " + data.dayList[0].date);
 					var source = $("#timesheet-summary").html();
 					var template = Handlebars.compile(source);
 					$("#timesheet-summary-table").html(template(data));
