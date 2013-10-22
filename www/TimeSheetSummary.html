@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Basic Page Needs
+		================================================== -->
+    <meta charset="utf-8">
+    <title>WTE UI</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+		================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS
+		================================================== -->
+    <link rel="stylesheet" href="/Content/assets/css/base.css" />
+    <link rel="stylesheet" href="/Content/assets/css/skeleton.css" />
+    <link rel="stylesheet" href="/Content/assets/css/layout.css" />
+    <link rel="stylesheet" href="/Content/assets/css/responsivemobilemenu.css" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,700,600,300' rel='stylesheet' type='text/css'>
+
+    <!-- Javascript
+	================================================== -->
+    <script type="text/javascript" src="/Scripts/jquery-1.7.1.js"></script>
+    <script src="/Content/assets/js/responsivemobilemenu.js"></script>
+    <script src="/Content/assets/js/functions.js"></script>
+    <script src="/Content/assets/js/initialize.js"></script>
+    <script src="/Scripts/knockout-2.1.0.js"></script>
+
+
+    <script type="text/javascript">
+
+        function DetailList() {
+            var self = this;
+            self.Id = ko.observable()
+            self.jobTaskDescription = ko.observable()
+            self.hours = ko.observable()
+            self.Progress = ko.observable()
+
+        }
+
+        function listViewModel() {
+            var self = this;
+            var DetailList = [{ Id: 0, jobTaskDescription: '', hours: 0 }];
+            var periodStartDate = getURLDate()
+
+            var list = [{
+                Id: ko.observable(),
+                Day: ko.observable(),
+                Month: ko.observable(),
+                Total: ko.observable(),
+                periodStartDate: ko.observable(periodStartDate),
+                DetailList: ko.observableArray(DetailList)
+            }];
+
+
+            self.list = ko.observableArray([]);
+
+            self.LoadData = function () {
+
+                var data = { timesheetRecId: obj.timesheetRecId, periodStartDate: obj.periodStartDate }
+                var url = "/api/Timesheet/GetTimesheetSummary"
+                var type = 'GET';
+
+                ajax(url, data, self.Result, type);
+            };
+
+            self.Result = function (listdata) {
+                self.list(listdata.dayList);
+            }
+
+            self.AddLine = function () {
+                var List = self.list()
+                var data = { timesheetDate: List[0].DateLink, timesheetRecId: obj.timesheetRecId }
+                window.location.href = 'AddTimeSheetEntry.html?' + $.param(data);
+            }
+            self.goToUrl = function (datelink) {
+
+                var data = { timesheetDate: datelink, timesheetRecId: obj.timesheetRecId }
+                window.location.href = 'TimesheetDayDetails.html?' + $.param(data);
+            };
+
+            self.LoadData();
+        }
+        $('document').ready(function () {
+            ko.applyBindings(new listViewModel());
+        });
+    </script>
+
+
+
+    <!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+    <!-- Favicons
+		================================================== -->
+    <link rel="shortcut icon" href="/Content/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/Content/assets/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/assets/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/assets/images/apple-touch-icon-114x114.png">
+    <title>Index</title>
+</head>
+<body>
+    <!-- Primary Page Layout
+		================================================== -->
+    <!-- Delete everything in this .container and get started on your own site! -->
+    <div class="container">
+        <header class="sixteen columns">
+            <a id="mobileNavIcon" href="#" class="floatleft">
+                <img src="/Content/assets/images/icon-menu.png" width="33px" height="31px" alt="" />
+            </a>
+            <ul id="nav">
+                <li><a href='TimesheetList.html'>Home</a></li>
+
+                <li><a data-bind="click:AddLine" href="">Add Line</a></li>
+
+            </ul>
+            <h1 class="remove-bottom">
+                <span id="loggedin-username"></span>
+                <ul id="UserNav">
+                    <li class="logout">Logout</li>
+                </ul>
+            </h1>
+            <a href="javascript:void(0)" class="icon-notification floatright"><span>26</span></a><a href="javascript:void(0)" id="SearchIcon" class="icon-search floatright"></a>
+            <form action="/search" id="search">
+                <input type="submit" class="btn btn-blue" value="Search">
+                <input type="text" placeholder="Enter Search Here..." name="q" id="q">
+            </form>
+        </header>
+        <input type="hidden" id="token" value="" />
+
+
+        <nav class="sixteen columns alpha omega">
+            <a href="javascript:void(0)">APPROVAL</a>
+            <a href="javascript:void(0)" class="active">TIME</a>
+            <a href="javascript:void(0)">EXPENSE</a>
+            <a href="javascript:void(0)">REC</a>
+        </nav>
+        <div class="sixteen columns top5">
+            <a data-bind="event:{click:LoadData}">
+                <img src="/Content/assets/images/icon-refresh.png" class="floatright right5" />
+            </a>
+            <span class="floatright right5">Updated about 3 minutes ago</span>
+        </div>
+
+        <div class="sixteen columns projects omega">
+            <ul data-bind="foreach:list">
+                <li>
+                    <span class="date"><span class="month" data-bind='text:Month'></span><span data-bind='text:Day'></span></span>
+                    <div data-bind="event:{click:$root.goToUrl.bind($data,DateLink)}" style="cursor: pointer" title="View Details">
+                        <ul class="details">
+                            <!-- ko foreach:DetailList -->
+                            <li data-bind='text:$data.jobTaskDescription+ " - " + $data.hours'></li>
+                            <!-- /ko -->
+                            <li><span class="totalhrs" data-bind='text:Total'></span></li>
+                        </ul>
+                        <div class="line-bar floatright">
+                            <!-- ko foreach:DetailList -->
+                            <div class="progressBar">
+                                <div></div>
+                            </div>
+                            <!-- /ko -->
+                            <span>3</span><span>4</span><span>5</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+    </div>
+</body>
+</html>

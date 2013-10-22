@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Basic Page Needs
+		================================================== -->
+    <meta charset="utf-8">
+    <title>WTE UI</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+		================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS
+		================================================== -->
+    <link rel="stylesheet" href="/Content/assets/css/base.css" />
+    <link rel="stylesheet" href="/Content/assets/css/skeleton.css" />
+    <link rel="stylesheet" href="/Content/assets/css/layout.css" />
+    <link rel="stylesheet" href="/Content/assets/css/responsivemobilemenu.css" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,700,600,300' rel='stylesheet' type='text/css'>
+
+    <!-- Javascript
+	================================================== -->
+    <script type="text/javascript" src="/Scripts/jquery-1.7.1.js"></script>
+    <script src="/Content/assets/js/responsivemobilemenu.js"></script>
+    <script src="/Content/assets/js/functions.js"></script>
+    <script src="/Content/assets/js/initialize.js"></script>
+    <script src="/Scripts/knockout-2.1.0.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        function DetailsViewModel() {
+            var self = this;
+            self.Header = ko.observable();
+            self.ResultList = ko.observableArray([]);
+            self.SubHeader = ko.observable();
+
+            self.LoadData = function () {
+
+                var data = null
+                var url = "/api/Timesheet/GetTimeSheetList"
+                var type = 'GET';
+
+                ajax(url, data, self.Result, type);
+            };
+
+            self.AddTimeSheet = function () {
+                window.location.href = 'AddTimeSheet.html'
+            }
+
+            self.goToUrl = function (date, id) {
+                var data = { timesheetRecId: id }
+                window.location.href = 'TimeSheetSummary.html?' + jQuery.param(data);
+            };
+
+            self.Result = function (details) {
+                self.Header(details.Header);
+                self.ResultList(details.ResultList);
+                self.SubHeader(details.SubHeader);
+            }
+
+            self.LoadData();
+
+        }
+
+        $('document').ready(function () {
+            ko.applyBindings(new DetailsViewModel());
+            $('body').addClass('full-blue');
+        });
+
+    </script>
+
+
+
+    <!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+    <!-- Favicons
+		================================================== -->
+    <link rel="shortcut icon" href="/Content/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/Content/assets/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/assets/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/assets/images/apple-touch-icon-114x114.png">
+    <title>TimesheetDayDetails</title>
+</head>
+<body>
+    <!-- Primary Page Layout
+		================================================== -->
+    <!-- Delete everything in this .container and get started on your own site! -->
+    <div class="container">
+        <header class="sixteen columns">
+            <a id="mobileNavIcon" href="#" class="floatleft">
+                <img src="/Content/assets/images/icon-menu.png" width="33px" height="31px" alt="" />
+            </a>
+            <ul id="nav">
+                <li><a href='TimesheetList.html'>Home</a></li>
+
+                <li><a data-bind="click:AddTimeSheet" href="">Add Time Sheet</a></li>
+
+            </ul>
+            <h1 class="remove-bottom">
+                <span id="loggedin-username"></span>
+                <ul id="UserNav">
+                    <li class="logout">Logout</li>
+                </ul>
+            </h1>
+            <a href="javascript:void(0)" class="icon-notification floatright"><span>26</span></a><a href="javascript:void(0)" id="SearchIcon" class="icon-search floatright"></a>
+            <form action="/search" id="search">
+                <input type="submit" class="btn btn-blue" value="Search">
+                <input type="text" placeholder="Enter Search Here..." name="q" id="q">
+            </form>
+        </header>
+        <input type="hidden" id="token" value="" />
+
+
+        <nav class="sixteen columns alpha omega">
+            <a href="javascript:void(0)">APPROVAL</a>
+            <a href="javascript:void(0)" class="active">TIME</a>
+            <a href="javascript:void(0)">EXPENSE</a>
+            <a href="javascript:void(0)">REC</a>
+        </nav>
+
+        <div class="sixteen columns forday omega top5">
+            <span class="date">
+                <span class="date" data-bind="text : Header"></span>
+                <span class="day" data-bind="text : SubHeader"></span>
+            </span>
+            <ul class="tasks">
+                <!-- ko foreach: ResultList -->
+                <li data-bind="event:{click:$root.goToUrl.bind($data,Description,Id)}" style="cursor: pointer" title="View Details">
+                    <div class="task-details">
+                        <div class="title" data-bind="text : Description"></div>
+                        <span class="hours" data-bind="text : Value"></span>
+                        <span class="comments" data-bind="text : Comments"></span>
+                    </div>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <button data-bind="click : AddTimeSheet">Add Time Sheet</button>
+        </div>
+    </div>
+</body>
+</html>

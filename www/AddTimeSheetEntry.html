@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Basic Page Needs
+		================================================== -->
+    <meta charset="utf-8">
+    <title>WTE UI</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+		================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS
+		================================================== -->
+    <link rel="stylesheet" href="/Content/assets/css/base.css" />
+    <link rel="stylesheet" href="/Content/assets/css/skeleton.css" />
+    <link rel="stylesheet" href="/Content/assets/css/layout.css" />
+    <link rel="stylesheet" href="/Content/assets/css/responsivemobilemenu.css" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,800,700,600,300' rel='stylesheet' type='text/css'>
+
+    <!-- Javascript
+	================================================== -->
+    <script type="text/javascript" src="/Scripts/jquery-1.7.1.js"></script>
+    <script src="/Content/assets/js/responsivemobilemenu.js"></script>
+    <script src="/Content/assets/js/functions.js"></script>
+    <script src="/Content/assets/js/initialize.js"></script>
+    <script src="/Scripts/knockout-2.1.0.js"></script>
+
+
+
+
+    <script>
+
+        function AddEntryViewModel() {
+            var self = this;
+
+            self.Jobs = ko.observableArray([]);
+            self.Tasks = ko.observableArray([]);
+            self.Indirects = ko.observableArray([]);
+            self.PayTypes = ko.observableArray([]);
+            self.Destinations = ko.observableArray([]);
+            self.Comment = ko.observable();
+            self.Hours = ko.observable();
+            self.Date = ko.observable();
+
+            self.SelectedJob = ko.observable();
+            self.SelectedTask = ko.observable();
+            self.SelectedIndirect = ko.observable();
+            self.SelectedPayType = ko.observable();
+            self.SelectedDestination = ko.observable();
+
+            self.TimesheetDayDetails = function () {
+                var data = { timesheetRecId: obj.timesheetRecId, timesheetDate: obj.timesheetDate }
+                window.location.href = 'TimesheetDayDetails.html?' + jQuery.param(data);
+            }
+
+            self.TimesheetSummary = function () {
+                var data = { timesheetRecId: obj.timesheetRecId }
+                window.location.href = 'TimeSheetSummary.html?' + $.param(data);
+            }
+
+            self.SubmitForm = function () {
+                var data = {
+                    JobId: self.SelectedJob(),
+                    TaskId: self.SelectedTask(),
+                    TaskCategoryId: self.SelectedIndirect(),
+                    PayTypeId: self.SelectedPayType(),
+                    DestinationId: self.SelectedDestination(),
+                    Hours: self.Hours(),
+                    Comment: self.Comment(),
+                    TimesheetDate: self.Date(),
+                    TimesheetRecId: obj.timesheetRecId
+                }
+
+                var url = "/Api/Timesheet/AddEntryLine"
+                var type = 'POST';
+                jsonajax(url, data, self.AddSuccess, type);
+            }
+
+            self.AddSuccess = function (data) {
+                if (data.Success == true) {
+                    var data = { timesheetDate: obj.timesheetDate, timesheetRecId: obj.timesheetRecId }
+                    window.location.href = 'TimesheetDayDetails.html?' + jQuery.param(data);
+                } else {
+                    $('#error').html(data.ErrorMessage)
+                }
+            }
+
+            self.getJobs = function () {
+                var data = null
+                var url = "/api/Timesheet/GetJobs"
+                var type = 'GET';
+
+                ajax(url, data, self.JobResults, type);
+            }
+
+            self.JobResults = function (jobdata) {
+                self.Jobs(jobdata.Data);
+            }
+
+            self.getTasks = function () {
+                var data = { JobId: self.SelectedJob() }
+                var url = "/api/Timesheet/GetTasks"
+                var type = 'GET';
+
+                ajax(url, data, self.TaskResults, type);
+            }
+
+            self.TaskResults = function (taskdata) {
+                self.Tasks(taskdata.Data);
+            }
+
+            self.getIndirects = function () {
+                var data = { TaskId: self.SelectedTask() }
+                var url = "/api/Timesheet/GetTaskCategories"
+                var type = 'GET';
+
+                ajax(url, data, self.IndirectResults, type);
+            }
+
+            self.IndirectResults = function (indirectdata) {
+                self.Indirects(indirectdata.Data);
+            }
+
+            self.getPayTypes = function () {
+                var data = null
+                var url = "/api/Timesheet/GetPayTypes"
+                var type = 'GET';
+
+                ajax(url, data, self.PayTypeResults, type);
+            }
+
+            self.PayTypeResults = function (paytypedata) {
+                self.PayTypes(paytypedata.Data);
+            }
+
+            self.getDestinations = function () {
+                var data = null
+                var url = "/api/Timesheet/GetDestinations"
+                var type = 'GET';
+
+                ajax(url, data, self.DestinationResults, type);
+            }
+
+            self.DestinationResults = function (jodestinationdata) {
+                self.Destinations(jodestinationdata.Data);
+            }
+
+            self.LoadData = function () {
+                self.getJobs();
+                self.getPayTypes();
+                self.getDestinations();
+                self.Date(obj.timesheetDate);
+            };
+
+            self.LoadData();
+        }
+
+        $('document').ready(function () {
+            ko.applyBindings(new AddEntryViewModel());
+            $('body').addClass('timesheet-entry');
+        });
+
+
+    </script>
+
+
+
+    <!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+    <!-- Favicons
+		================================================== -->
+    <link rel="shortcut icon" href="/Content/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/Content/assets/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/assets/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/assets/images/apple-touch-icon-114x114.png">
+    <title>AddTimeSheetEntry</title>
+</head>
+<body>
+    <!-- Primary Page Layout
+		================================================== -->
+    <!-- Delete everything in this .container and get started on your own site! -->
+    <div class="container">
+        <header class="sixteen columns">
+            <a id="mobileNavIcon" href="#" class="floatleft">
+                <img src="/Content/assets/images/icon-menu.png" width="33px" height="31px" alt="" />
+            </a>
+            <ul id="nav">
+                <li><a href='TimesheetList.html'>Home</a></li>
+
+                <li><a data-bind="click:TimesheetSummary" href="">Timesheet List</a></li>
+                <li><a data-bind="click:TimesheetDayDetails" href="">Timesheet Details</a></li>
+
+
+
+            </ul>
+            <h1 class="remove-bottom">
+                <span id="loggedin-username"></span>
+                <ul id="UserNav">
+                    <li class="logout">Logout</li>
+                </ul>
+            </h1>
+            <a href="javascript:void(0)" class="icon-notification floatright"><span>26</span></a><a href="javascript:void(0)" id="SearchIcon" class="icon-search floatright"></a>
+            <form action="/search" id="search">
+                <input type="submit" class="btn btn-blue" value="Search">
+                <input type="text" placeholder="Enter Search Here..." name="q" id="q">
+            </form>
+        </header>
+        <input type="hidden" id="token" value="" />
+
+
+        <nav class="sixteen columns alpha omega">
+            <a href="javascript:void(0)">APPROVAL</a>
+            <a href="javascript:void(0)" class="active">TIME</a>
+            <a href="javascript:void(0)">EXPENSE</a>
+            <a href="javascript:void(0)">REC</a>
+        </nav>
+        <div class="sixteen columns">
+            <div class="content">
+                <!-- BEGIN LOGIN FORM -->
+                <form class="entry-form" action="/" method="post">
+                    <h3 class="form-title">Add TimeSheet Entry</h3>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Date</label>
+                            <input type="date" data-bind="value:Date" class="m-wrap" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Job</label>
+                            <select name="Jobs"
+                                data-bind="
+			                    options: Jobs,	
+                                optionsText: 'Value', 
+				                optionsValue: 'Id',
+				                optionsCaption: 'Select Job',
+                                value : SelectedJob,
+                                foreach : Jobs,
+				                event:{change:getTasks}
+				                "
+                                class="m-wrap">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Job WBS</label>
+                            <select
+                                data-bind="
+			                options: Tasks, 	
+                            optionsText: 'Value', 
+				            optionsValue: 'Id', 
+                            value : SelectedTask,
+				            optionsCaption: 'Select Job WBS',
+				            event:{change:getIndirects}
+				            "
+                                class="m-wrap">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Project Category</label>
+                            <select
+                                data-bind="
+				            options: Indirects, 	
+                            optionsText: 'Value', 
+				            optionsValue: 'Id', 
+                            value : SelectedIndirect,
+				            optionsCaption: 'Select Indirect',
+				            foreach : Indirects
+				            "
+                                class="m-wrap">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Pay Type</label>
+                            <select
+                                data-bind="
+				            options: PayTypes,	
+				            optionsText: 'Value', 
+				            optionsValue: 'Id', 
+                            value : SelectedPayType,
+				            optionsCaption: 'Select Pay Type'
+				            "
+                                class="m-wrap">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Destination</label>
+                            <select
+                                data-bind="
+				            options: Destinations,	
+				            optionsText: 'Value', 
+				            optionsValue: 'Id', 
+                            value : SelectedDestination,
+				            optionsCaption: 'Select destination'
+				            "
+                                class="m-wrap">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Hours</label>
+                            <input type="text" name="Hours" data-bind="value:Hours" class="m-wrap" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label for="">Comments</label>
+                            <textarea class="m-wrap" data-bind="value:Comment" name="Comment"></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="button" class="btn blue floatright" value='Save' data-bind='click:SubmitForm' />
+
+                            <input type="button" class="btn blue floatright" value='Cancel' data-bind='click:TimesheetDayDetails' />
+                        </div>
+                    </div>
+                </form>
+                <!-- END LOGIN FORM -->
+                <div id="error"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
